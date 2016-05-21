@@ -80,7 +80,7 @@ test('with arguments', assert => {
 test('rejected promise', assert => {
   const msg = 'should notify onError';
   const halt = 'should not emit more data';
-  const noComplete = 'should not notify onComplete';
+  const noComplete = 'should not notify onCompleted';
 
   const fetchSomething = () => new Promise((x, reject) => {
     setTimeout(() =>
@@ -113,7 +113,7 @@ test('rejected promise', assert => {
 test('promise throw', assert => {
   const msg = 'should notify onError';
   const halt = 'should not emit more data';
-  const noComplete = 'should not notify onComplete';
+  const noComplete = 'should not notify onCompleted';
 
   const fetchSomething = () => new Promise(() => {
     throw new Error('Could not fetch data');
@@ -144,7 +144,7 @@ test('promise throw', assert => {
 test('generator throw', assert => {
   const msg = 'should notify onError';
   const halt = 'should not emit more data';
-  const noComplete = 'should not notify onComplete';
+  const noComplete = 'should not notify onCompleted';
 
   const generator = function* () {
     throw new Error('faulty generator');
@@ -165,5 +165,28 @@ test('generator throw', assert => {
   },
   () => {
     assert.fail(noComplete);
+  });
+});
+
+test('Rx observable', assert => {
+  const msg = 'should return fleshed out Rx Observable';
+
+  const generator = function* () {
+    yield 1;
+    yield 2;
+    yield 3;
+  };
+  const observable = ogen(generator)();
+
+  const actual = [];
+  const expected = [2, 4, 6];
+
+  observable.map(n => n * 2).subscribe(item => {
+    actual.push(item);
+  },
+  null,
+  () => {
+    assert.same(actual, expected, msg);
+    assert.end();
   });
 });
