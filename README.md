@@ -36,6 +36,13 @@ asyncFunc('a param', 'another param', 'more params!')
 // done.
 ```
 
+## Platform Notes
+
+Obviously, this relies on generators. Works OK with Babel, Node v4+.
+**Does not work in any IE without polyfills.**
+
+Should work in most other modern browsers.
+
 
 Written for Learn JavaScript with Eric Elliott
 ==============================================
