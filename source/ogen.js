@@ -1,3 +1,5 @@
+const Rx = require('rx');
+
 /* eslint-disable no-use-before-define */
 if (typeof setImmediate !== 'function') {
   var setImmediate = fn => setTimeout(fn, 0);
@@ -6,44 +8,39 @@ if (typeof setImmediate !== 'function') {
 const isPromise = (obj) => typeof obj !== 'undefined' &&
   typeof obj.then === 'function';
 
-const next = (iter, callbacks, prev = undefined) => {
-  const {
-    onNext,
-    onError,
-    onComplete
-  } = callbacks;
+const next = (iter, observer, prev = undefined) => {
 
   let item;
 
   try {
     item = iter.next(prev);
   } catch (err) {
-    return onError(err);
+    return observer.onError(err);
   }
 
   const value = item.value;
 
   if (item.done) {
-    return onComplete();
+    return observer.onCompleted();
   }
 
   if (isPromise(value)) {
     value.then(val => {
-      onNext(val);
-      setImmediate(() => next(iter, callbacks, val));
+      observer.onNext(val);
+      setImmediate(() => next(iter, observer, val));
     }).catch(err => {
-      return onError(err);
+      return observer.onError(err);
     });
   } else {
-    onNext(value);
-    setImmediate(() => next(iter, callbacks, value));
+    observer.onNext(value);
+    setImmediate(() => next(iter, observer, value));
   }
 };
 
-const ogen = (fn) => (...args) => ({
-  subscribe: (onNext, onError, onComplete) => {
-    next(fn(...args), { onNext, onError, onComplete });
-  }
-});
+const ogen = (fn) => (...args) => {
+  return Rx.Observable.create(observer => {
+    next(fn(...args), observer);
+  });
+};
 
 module.exports = ogen.ogen = ogen.default = ogen;
