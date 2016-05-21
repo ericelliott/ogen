@@ -1,6 +1,6 @@
 const test = require('tape');
 
-const ogen = require('ogen');
+const ogen = require('../ogen');
 
 test('basic observable', assert => {
   const msg = 'should create observable from generator';
@@ -74,5 +74,37 @@ test('with arguments', assert => {
   () => {
     assert.same(actual, expected, msg);
     assert.end();
+  });
+});
+
+test('rejected promise', assert => {
+  const msg = 'should notify onError';
+  const halt = 'should not emit more data';
+  const noComplete = 'should not notify onComplete';
+
+  const fetchSomething = () => new Promise((x, reject) => {
+    setTimeout(() =>
+      reject(new Error('Could not fetch data')), 10);
+  });
+
+  const generator = function* () {
+    const result = yield fetchSomething();
+
+    // should not emit this
+    yield result + ' 2';
+  };
+
+  const observable = ogen(generator)();
+
+  observable.subscribe(val => {
+    assert.fail(halt);
+    assert.fail(`emitted: ${ val }`);
+  },
+  () => {
+    assert.pass(msg);
+    setTimeout(() => assert.end(), 500);
+  },
+  () => {
+    assert.fail(noComplete);
   });
 });

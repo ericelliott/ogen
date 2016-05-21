@@ -7,7 +7,11 @@ const isPromise = (obj) => typeof obj !== 'undefined' &&
   typeof obj.then === 'function';
 
 const next = (iter, callbacks, prev = undefined) => {
-  const { onNext, onComplete } = callbacks;
+  const {
+    onNext,
+    onError,
+    onComplete
+  } = callbacks;
   const item = iter.next(prev);
   const value = item.value;
 
@@ -19,6 +23,8 @@ const next = (iter, callbacks, prev = undefined) => {
     value.then(val => {
       onNext(val);
       setImmediate(() => next(iter, callbacks, val));
+    }).catch(err => {
+      return onError(err);
     });
   } else {
     onNext(value);
