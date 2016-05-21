@@ -102,7 +102,66 @@ test('rejected promise', assert => {
   },
   () => {
     assert.pass(msg);
-    setTimeout(() => assert.end(), 500);
+    setTimeout(() => assert.end(), 10);
+  },
+  () => {
+    assert.fail(noComplete);
+  });
+});
+
+
+test('promise throw', assert => {
+  const msg = 'should notify onError';
+  const halt = 'should not emit more data';
+  const noComplete = 'should not notify onComplete';
+
+  const fetchSomething = () => new Promise(() => {
+    throw new Error('Could not fetch data');
+  });
+
+  const generator = function* () {
+    const result = yield fetchSomething();
+
+    // should not emit this
+    yield result + ' 2';
+  };
+
+  const observable = ogen(generator)();
+
+  observable.subscribe(val => {
+    assert.fail(halt);
+    assert.fail(`emitted: ${ val }`);
+  },
+  () => {
+    assert.pass(msg);
+    setTimeout(() => assert.end(), 10);
+  },
+  () => {
+    assert.fail(noComplete);
+  });
+});
+
+test('generator throw', assert => {
+  const msg = 'should notify onError';
+  const halt = 'should not emit more data';
+  const noComplete = 'should not notify onComplete';
+
+  const generator = function* () {
+    throw new Error('faulty generator');
+
+    /* eslint-disable no-unreachable */
+    yield 'should not emit this';
+  };
+
+  const observable = ogen(generator)();
+
+  observable.subscribe(val => {
+    assert.fail(halt);
+    assert.fail(`emitted: ${ val }`);
+  },
+  () => {
+    assert.pass(msg);
+    setTimeout(() => assert.end(), 10);
   },
   () => {
     assert.fail(noComplete);
