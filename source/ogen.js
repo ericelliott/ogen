@@ -1,3 +1,8 @@
+/* eslint-disable no-use-before-define */
+if (typeof setImmediate !== 'function') {
+  var setImmediate = fn => setTimeout(fn, 0);
+}
+
 const next = (iter, callbacks, prev = undefined) => {
   const { onNext, onComplete } = callbacks;
   const item = iter.next(prev);
