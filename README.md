@@ -1,6 +1,6 @@
-# ogen
+# Ogen
 
-An observable Async/Await.
+An observable Async/Await. Short for (O)bservable (Gen)erator.
 
 Write asynchronous code that looks synchronous:
 
@@ -16,7 +16,7 @@ const myFunc = function* (param1, param2, param3) {
 }
 ```
 
-Pass it into `ogen()` and get back an observable that you can subscribe to:
+Pass it into `ogen()` and get back an observable that lets you subscribe to all the yielded values:
 
 ```js
 const onNext = val => console.log(val);
@@ -35,6 +35,8 @@ asyncFunc('a param', 'another param', 'more params!')
 // more params!
 // done.
 ```
+
+Ogen returns a full [Rx Observable instance](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md#observable-instance-methods), which means you can `.map()`, `.filter()` and `.skip()` to your heart’s content, among other things.
 
 ## Platform Notes
 
