@@ -1,6 +1,6 @@
 # ogen
 
-An observable Async/Await. An example for "Learn JavaScript with Eric Elliott"
+An observable Async/Await.
 
 Write asynchronous code that looks synchronous:
 
