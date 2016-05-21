@@ -27,6 +27,7 @@ test('basic observable', assert => {
 
 test('with promises', assert => {
   const msg = 'should wait for promises to resolve';
+
   const fetchSomething = () => new Promise((resolve) => {
     setTimeout(() => resolve('future value'), 10);
   });
@@ -42,6 +43,29 @@ test('with promises', assert => {
 
   const actual = [];
   const expected = ['future value', 'future value 2'];
+
+  observable.subscribe(item => {
+    actual.push(item);
+  },
+  null,
+  () => {
+    assert.same(actual, expected, msg);
+    assert.end();
+  });
+});
+
+test('with arguments', assert => {
+  const msg = 'should pass args to generator';
+
+  const generator = function* (param1, param2, param3) {
+    yield param1;
+    yield param2;
+    yield param3;
+  };
+  const observable = ogen(generator)(1, 2, 3);
+
+  const actual = [];
+  const expected = [1, 2, 3];
 
   observable.subscribe(item => {
     actual.push(item);
