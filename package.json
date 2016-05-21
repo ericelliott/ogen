@@ -1,6 +1,6 @@
 {
   "name": "ogen",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An observable Async/Await. Write async code that looks synchronous.",
   "main": "source/ogen.js",
   "scripts": {
