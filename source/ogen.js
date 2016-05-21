@@ -3,6 +3,9 @@ if (typeof setImmediate !== 'function') {
   var setImmediate = fn => setTimeout(fn, 0);
 }
 
+const isPromise = (obj) => typeof obj !== 'undefined' &&
+  typeof obj.then === 'function';
+
 const next = (iter, callbacks, prev = undefined) => {
   const { onNext, onComplete } = callbacks;
   const item = iter.next(prev);
@@ -12,8 +15,15 @@ const next = (iter, callbacks, prev = undefined) => {
     return onComplete();
   }
 
-  onNext(value);
-  setImmediate(() => next(iter, callbacks, value));
+  if (isPromise(value)) {
+    value.then(val => {
+      onNext(val);
+      setImmediate(() => next(iter, callbacks, val));
+    });
+  } else {
+    onNext(value);
+    setImmediate(() => next(iter, callbacks, value));
+  }
 };
 
 const ogen = (fn) => (...args) => ({

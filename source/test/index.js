@@ -24,3 +24,31 @@ test('basic observable', assert => {
     assert.end();
   });
 });
+
+test('with promises', assert => {
+  const msg = 'should wait for promises to resolve';
+  const fetchSomething = () => new Promise((resolve) => {
+    setTimeout(() => resolve('future value'), 10);
+  });
+
+  const generator = function* () {
+    const result = yield fetchSomething(); // returns promise
+
+    // waits for promise and uses promise result
+    yield result + ' 2';
+  };
+
+  const observable = ogen(generator)();
+
+  const actual = [];
+  const expected = ['future value', 'future value 2'];
+
+  observable.subscribe(item => {
+    actual.push(item);
+  },
+  null,
+  () => {
+    assert.same(actual, expected, msg);
+    assert.end();
+  });
+});
