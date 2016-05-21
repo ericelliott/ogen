@@ -1,6 +1,40 @@
-# asyncfunc
+# ogen
 
-Like async/await without the wait. An example for "Learn JavaScript with Eric Elliott"
+An observable Async/Await. An example for "Learn JavaScript with Eric Elliott"
+
+Write asynchronous code that looks synchronous:
+
+```js
+const myFunc = function* (param1, param2, param3) {
+  const result = yield fetchSomething(); // returns promise
+
+  // waits for promise and uses promise result
+  yield result + ' 2';
+  yield param1;
+  yield param2;
+  yield param3;
+}
+```
+
+Pass it into `ogen()` and get back an observable that you can subscribe to:
+
+```js
+const onNext = val => console.log(val);
+const onError = err => console.log(err);
+const onComplete = () => console.log('done.');
+
+const asyncFunc = ogen(myFunc);
+
+// Call the async function and pass params.
+asyncFunc('a param', 'another param', 'more params!')
+  .subscribe(onNext, onError, onComplete);
+// future value
+// future value 2
+// a param
+// another param
+// more params!
+// done.
+```
 
 
 Written for Learn JavaScript with Eric Elliott
