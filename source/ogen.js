@@ -12,7 +12,15 @@ const next = (iter, callbacks, prev = undefined) => {
     onError,
     onComplete
   } = callbacks;
-  const item = iter.next(prev);
+
+  let item;
+
+  try {
+    item = iter.next(prev);
+  } catch (err) {
+    return onError(err);
+  }
+
   const value = item.value;
 
   if (item.done) {
