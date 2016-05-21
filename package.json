@@ -1,0 +1,36 @@
+{
+  "name": "ogen",
+  "version": "0.0.0",
+  "description": "An observable Async/Await. Write async code that looks synchronous.",
+  "main": "source/ogen.js",
+  "scripts": {
+    "lint": "eslint . && echo 'Lint finished...\n'",
+    "pretest": "npm run -s lint",
+    "test": "cross-env NODE_PATH='source' node source/test/index.js",
+    "watch": "watch 'clear && npm run -s test' source",
+    "update": "updtr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericelliott/ogen.git"
+  },
+  "keywords": [
+    "async",
+    "asynchronous",
+    "generator",
+    "generators",
+    "observable",
+    "observables"
+  ],
+  "author": "Eric Elliott",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericelliott/ogen/issues"
+  },
+  "homepage": "https://github.com/ericelliott/ogen#readme",
+  "devDependencies": {
+    "cross-env": "1.0.7",
+    "eslint": "2.10.2",
+    "tape": "4.5.1"
+  }
+}
