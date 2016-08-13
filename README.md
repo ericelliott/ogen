@@ -35,7 +35,7 @@ const myFunc = function* (param1, param2, param3) {
   yield param1;
   yield param2;
   yield param3;
-}
+};
 ```
 
 Notice you can also yield any number of synchronous values, or any number of promises. All of your `yield` statements will yield observable values.
