@@ -1,4 +1,4 @@
-const Rx = require('rx');
+const Rx = require('rxjs/Rx');
 
 /* eslint-disable no-use-before-define */
 if (typeof setImmediate !== 'function') {
@@ -15,24 +15,24 @@ const next = (iter, observer, prev = undefined) => {
   try {
     item = iter.next(prev);
   } catch (err) {
-    return observer.onError(err);
+    return observer.error(err);
   }
 
   const value = item.value;
 
   if (item.done) {
-    return observer.onCompleted();
+    return observer.complete();
   }
 
   if (isPromise(value)) {
     value.then(val => {
-      observer.onNext(val);
+      observer.next(val);
       setImmediate(() => next(iter, observer, val));
     }).catch(err => {
-      return observer.onError(err);
+      return observer.error(err);
     });
   } else {
-    observer.onNext(value);
+    observer.next(value);
     setImmediate(() => next(iter, observer, value));
   }
 };

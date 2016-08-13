@@ -78,9 +78,9 @@ test('with arguments', assert => {
 });
 
 test('rejected promise', assert => {
-  const msg = 'should notify onError';
+  const msg = 'should notify on error';
   const halt = 'should not emit more data';
-  const noComplete = 'should not notify onCompleted';
+  const noComplete = 'should not notify on complete';
 
   const fetchSomething = () => new Promise((x, reject) => {
     setTimeout(() =>
@@ -111,9 +111,9 @@ test('rejected promise', assert => {
 
 
 test('promise throw', assert => {
-  const msg = 'should notify onError';
+  const msg = 'should notify on error';
   const halt = 'should not emit more data';
-  const noComplete = 'should not notify onCompleted';
+  const noComplete = 'should not notify on complete';
 
   const fetchSomething = () => new Promise(() => {
     throw new Error('Could not fetch data');
@@ -142,9 +142,9 @@ test('promise throw', assert => {
 });
 
 test('generator throw', assert => {
-  const msg = 'should notify onError';
+  const msg = 'should notify on error';
   const halt = 'should not emit more data';
-  const noComplete = 'should not notify onCompleted';
+  const noComplete = 'should not notify on complete';
 
   const generator = function* () {
     throw new Error('faulty generator');
