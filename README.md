@@ -1,8 +1,30 @@
 # Ogen
 
-An observable Async/Await. Short for (O)bservable (Gen)erator.
+An observable version of async/await using regular generators. Short for (O)bservable (Gen)erator.
 
-Write asynchronous code that looks synchronous:
+Write asynchronous code that looks synchronous, then tame your yielded values with observable methods like `.map()`, `.filter()`, `.take()`, `.zip()`, `.skip()`, etc...
+
+## Installing
+
+```
+npm install ogen --save
+```
+
+## import / require
+
+```js
+// ES6 Module import
+import ogen from 'ogen';
+```
+
+```js
+// Node module import
+const ogen = require('ogen');
+```
+
+Ogen uses **generator functions** to work its magic. If you don't know what they are, read: ["7 Surprising Things I Learned Writing a Fibonacci Generator in JavaScript"](https://medium.com/javascript-scene/7-surprising-things-i-learned-writing-a-fibonacci-generator-4886a5c87710) and ["The Hidden Power of ES6 Generators: Observable Async Flow Control"](https://medium.com/javascript-scene/the-hidden-power-of-es6-generators-observable-async-flow-control-cfa4c7f31435), which describes the inner workings of Ogen in-depth.
+
+When you yield a promise, Ogen intercepts it, waits for it to resolve, unwraps the resolved value, and passes the yielded value back into your function, assigning it to the left side variable:
 
 ```js
 const myFunc = function* (param1, param2, param3) {
@@ -16,7 +38,9 @@ const myFunc = function* (param1, param2, param3) {
 }
 ```
 
-Pass it into `ogen()` and get back an observable that lets you subscribe to all the yielded values:
+Notice you can also yield any number of synchronous values, or any number of promises. All of your `yield` statements will yield observable values.
+
+Pass your generator function into `ogen()` and get back an observable that lets you subscribe to all the yielded values:
 
 ```js
 const onNext = val => console.log(val);
@@ -38,7 +62,8 @@ asyncFunc('a param', 'another param', 'more params!')
 
 Ogen returns a full [Rx Observable instance](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md#observable-instance-methods), which means you can `.map()`, `.filter()` and `.skip()` to your heart’s content, among other things.
 
-For a much more detailed description of how Ogen works, read ["The Hidden Power of ES6 Generators"](https://medium.com/javascript-scene/the-hidden-power-of-es6-generators-observable-async-flow-control-cfa4c7f31435)
+For a much more detailed description of how what Observables are all about, watch ["Asynchronous Programming at Netflix"](https://www.youtube.com/watch?v=gawmdhCNy-A).
+
 
 ## Breaking Changes in 2.0.0
 
