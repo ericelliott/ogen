@@ -38,6 +38,12 @@ asyncFunc('a param', 'another param', 'more params!')
 
 Ogen returns a full [Rx Observable instance](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md#observable-instance-methods), which means you can `.map()`, `.filter()` and `.skip()` to your heart’s content, among other things.
 
+## Breaking Changes in 2.0.0
+
+As of v2.0.0, Ogen returns an RxJS 5 Observable, meaning that it complies with the current ESNext Observable standard proposal. This is a breaking change.
+
+For migration help, see [rxjs/Migration](https://github.com/ReactiveX/rxjs/blob/master/MIGRATION.md).
+
 ## Platform Notes
 
 Obviously, this relies on generators. Works OK with Babel, Node v4+.
