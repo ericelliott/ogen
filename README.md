@@ -4,6 +4,10 @@ An observable version of async/await using regular generators. Short for (O)bser
 
 Write asynchronous code that looks synchronous, then tame your yielded values with observable methods like `.map()`, `.filter()`, `.take()`, `.zip()`, `.skip()`, etc...
 
+## Status
+
+We're not yet compiling for ES5, which means you can't use this on iOS devices yet.
+
 ## Installing
 
 ```
